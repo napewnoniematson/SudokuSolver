@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/input_fragment_navigation"
+    app:startDestination="@id/customEditFragment">
+
+    <fragment
+        android:id="@+id/customEditFragment"
+        android:label="@string/custom_nav_lbl"
+        android:name="com.napewnoniematson.sudokusolver.CustomEditFragment"
+        tools:layout="@layout/fragment_custom_edit" />
+    <fragment
+        android:id="@+id/cameraPhotoFragment"
+        android:label="@string/camera_nav_lbl"
+        android:name="com.napewnoniematson.sudokusolver.CameraPhotoFragment"
+        tools:layout="@layout/fragment_camera_photo" />
+    <fragment
+        android:id="@+id/loadPhotoFragment"
+        android:label="@string/library_nav_lbl"
+        android:name="com.napewnoniematson.sudokusolver.LoadPhotoFragment"
+        tools:layout="@layout/fragment_load_photo" />
+</navigation>

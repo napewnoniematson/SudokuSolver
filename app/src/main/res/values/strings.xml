@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">SudokuSolver</string>
+    <string name="app_name">Sudoku Solver</string>
+
+    <string name="custom_nav_btn">custom</string>
+    <string name="camera_nav_btn">camera</string>
+    <string name="library_nav_btn">images</string>
+
+    <string name="custom_nav_lbl">Custom</string>
+    <string name="camera_nav_lbl">Camera</string>
+    <string name="library_nav_lbl">Load</string>
 </resources>
