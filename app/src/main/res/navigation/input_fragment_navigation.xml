@@ -8,16 +8,16 @@
     <fragment
         android:id="@+id/customEditFragment"
         android:label="@string/custom_nav_lbl"
-        android:name="com.napewnoniematson.sudokusolver.CustomEditFragment"
+        android:name="com.napewnoniematson.sudokusolver.view.fragment.CustomEditFragment"
         tools:layout="@layout/fragment_custom_edit" />
     <fragment
         android:id="@+id/cameraPhotoFragment"
         android:label="@string/camera_nav_lbl"
-        android:name="com.napewnoniematson.sudokusolver.CameraPhotoFragment"
+        android:name="com.napewnoniematson.sudokusolver.view.fragment.CameraPhotoFragment"
         tools:layout="@layout/fragment_camera_photo" />
     <fragment
         android:id="@+id/loadPhotoFragment"
         android:label="@string/library_nav_lbl"
-        android:name="com.napewnoniematson.sudokusolver.LoadPhotoFragment"
+        android:name="com.napewnoniematson.sudokusolver.view.fragment.LoadPhotoFragment"
         tools:layout="@layout/fragment_load_photo" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.napewnoniematson.sudokusolver.view
+package com.napewnoniematson.sudokusolver.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
