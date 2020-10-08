@@ -5,56 +5,42 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.napewnoniematson.sudokusolver.R
+import com.napewnoniematson.sudokusolver.view.widget.SudokuBoardView
+import com.napewnoniematson.sudokusolver.viewmodel.CustomSudokuViewModel
+import kotlinx.android.synthetic.main.fragment_custom_edit.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CustomEditFragment : Fragment(), SudokuBoardView.OnTouchListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CustomEditFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CustomEditFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var customViewModel: CustomSudokuViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_custom_edit, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CustomEditFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CustomEditFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        customViewModel = CustomSudokuViewModel()
+        sudokuBoardView.setOnTouchListener(this)
+        //TODO CustomSudokuViewModel -> ViewModelProvider
+        customViewModel.backend.selectedCellLiveData.observe(viewLifecycleOwner,
+            Observer { updateSelectedCellUI(it) }
+        )
+    }
+
+    private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
+        sudokuBoardView.updateSelectedCellUI(cell.first, cell.second)
+    }
+
+    override fun onCellTouched(row: Int, col: Int) {
+        customViewModel.backend.updateSelectedCell(row, col)
     }
 }
