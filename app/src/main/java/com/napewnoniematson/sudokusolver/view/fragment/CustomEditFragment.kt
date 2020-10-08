@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.napewnoniematson.sudokusolver.R
+import com.napewnoniematson.sudokusolver.model.Cell
 import com.napewnoniematson.sudokusolver.view.widget.SudokuBoardView
 import com.napewnoniematson.sudokusolver.viewmodel.CustomSudokuViewModel
 import kotlinx.android.synthetic.main.fragment_custom_edit.*
@@ -34,6 +35,13 @@ class CustomEditFragment : Fragment(), SudokuBoardView.OnTouchListener {
         customViewModel.backend.selectedCellLiveData.observe(viewLifecycleOwner,
             Observer { updateSelectedCellUI(it) }
         )
+        customViewModel.backend.cellsLiveData.observe(viewLifecycleOwner, Observer {
+            updateCells(it)
+        })
+    }
+
+    private fun updateCells(cells: List<Cell>?) = cells?.let {
+        sudokuBoardView.updateCells(cells)
     }
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {

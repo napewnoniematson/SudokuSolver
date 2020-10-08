@@ -1,12 +1,11 @@
 package com.napewnoniematson.sudokusolver.view.widget
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.napewnoniematson.sudokusolver.model.Cell
 
 class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
@@ -19,6 +18,8 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     private var selectedCol = -1
 
     private var listener: SudokuBoardView.OnTouchListener? = null
+
+    private var cells: List<Cell>? = null
 
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
@@ -42,6 +43,13 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
         color = Color.parseColor("#c06c84")
     }
 
+    private val textPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.BLACK
+        textSize = 48f
+        typeface = Typeface.DEFAULT_BOLD
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
@@ -55,22 +63,26 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     private fun haveSameSign(arg1: Int, arg2: Int) = arg1 > 0 && arg2 > 0 || arg1 < 0 && arg2 < 0
 
     override fun onDraw(canvas: Canvas?) {
+        if (canvas == null) return
+
         cellSizePixels = (width / size).toFloat()
         fillCells(canvas)
         drawLines(canvas)
+        drawText(canvas)
     }
 
     private fun fillCells(canvas: Canvas?) {
         if (selectedRow == -1 || selectedCol == -1) return
-        for (r in 0..size) {
-            for (c in 0..size) {
-                if (r == selectedRow && c == selectedCol) {
-                    fillCell(canvas, r, c, selectedCellPaint)
-                } else if (r == selectedRow || c == selectedCol) {
-                    fillCell(canvas, r, c, conflictingCellPaint)
-                } else if (r / sqrtSize == selectedRow / sqrtSize && c / sqrtSize == selectedCol / sqrtSize) {
-                    fillCell(canvas, r, c, conflictingCellPaint)
-                }
+
+        cells?.forEach {
+            val r = it.row
+            val c = it.col
+            if (r == selectedRow && c == selectedCol) {
+                fillCell(canvas, r, c, selectedCellPaint)
+            } else if (r == selectedRow || c == selectedCol) {
+                fillCell(canvas, r, c, conflictingCellPaint)
+            } else if (r / sqrtSize == selectedRow / sqrtSize && c / sqrtSize == selectedCol / sqrtSize) {
+                fillCell(canvas, r, c, conflictingCellPaint)
             }
         }
     }
@@ -112,6 +124,27 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
         }
     }
 
+    private fun drawText(canvas: Canvas?) {
+        cells?.forEach {
+            val row = it.row
+            val col = it.col
+            val valueString = it.value.toString()
+
+            val textBounds = Rect()
+            textPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
+            val textWidth = textPaint.measureText(valueString)
+            val textHeight = textBounds.height()
+
+            canvas?.drawText(
+                valueString,
+                (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
+                (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2,
+                textPaint
+            )
+
+        }
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -131,6 +164,11 @@ class SudokuBoardView(context: Context, attributeSet: AttributeSet) : View(conte
     fun updateSelectedCellUI(row: Int, col: Int) {
         selectedRow = row
         selectedCol = col
+        invalidate()
+    }
+
+    fun updateCells(cells: List<Cell>) {
+        this.cells = cells
         invalidate()
     }
 
